@@ -80,7 +80,6 @@ const Sidebar = () => {
   };
   const logOutHandedl = async () => {
     const res = await logOut(currentUser);
-    console.log(res);
     if (res.status == 200) {
       setCookie("user", "", {
         path: "/",

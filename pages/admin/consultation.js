@@ -20,7 +20,6 @@ const posts = () => {
   const { push, query } = useRouter();
   useEffect(() => {
     if (query.id) {
-      console.log(query.id);
     }
   }, []);
 
@@ -34,7 +33,6 @@ const posts = () => {
     //TODO validar si la consulta es nueva o de seguimiento.
     const dataSend = datahelp(data);
     if (query.id) dataSend.patient_uuid = query.id;
-    console.log(currentUser);
     const response = await fetch(
       NUTRINA_API.apiNutrina + "/medical-consultation/medical-consultation",
       {
@@ -47,7 +45,6 @@ const posts = () => {
       }
     );
     const uuidConsultation = await response.json();
-    console.log("res: ", uuidConsultation.uuid);
     if (response.status == 200) {
       Swal.fire({
         position: "top-start",
@@ -120,7 +117,6 @@ const posts = () => {
         <Input
           name="email"
           label="Email:"
-          required
           type="email"
           placeholder="Ejem: user@gmail.com"
         />

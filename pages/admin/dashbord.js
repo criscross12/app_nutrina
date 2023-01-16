@@ -17,7 +17,6 @@ export default function Home() {
   useEffect(() => {
     checkLoggedIn();
   }, []);
-  console.log(currentUser);
 
   return (
     <Layout title="Dashbord">

@@ -3,17 +3,31 @@ export const datahelp = (data) => {
   const patient_uuid = "";
   const note = data["note"];
 
-  const data_patient = {
-    name: data["name"],
-    first_name: data["first_name"],
-    second_name: data["second_name"],
-    date_of_birth: data["date_of_birth"],
-    email: data["email"],
-    ocupation: data["ocupation"],
-    phone: data["phone"],
-    reason: data["reason"],
-    sex: data["sex"],
-  };
+  let data_patient = {};
+  if (data["email"] == "") {
+    data_patient = {
+      name: data["name"],
+      first_name: data["first_name"],
+      second_name: data["second_name"],
+      date_of_birth: data["date_of_birth"],
+      ocupation: data["ocupation"],
+      phone: data["phone"],
+      reason: data["reason"],
+      sex: data["sex"],
+    };
+  } else {
+    data_patient = {
+      name: data["name"],
+      first_name: data["first_name"],
+      second_name: data["second_name"],
+      date_of_birth: data["date_of_birth"],
+      email: data["email"],
+      ocupation: data["ocupation"],
+      phone: data["phone"],
+      reason: data["reason"],
+      sex: data["sex"],
+    };
+  }
 
   const basic_measurements = {
     weight: parseFloat(data["weight"]),

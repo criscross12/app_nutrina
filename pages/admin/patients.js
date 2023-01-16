@@ -19,7 +19,6 @@ import { NUTRINA_API } from "../../utils/config";
 
 const Patients = () => {
   const { currentUser, setCurrentUser } = useContext(DataContext);
-  console.log("User: ", currentUser);
   const checkLoggedIn = async () => {
     let cuser = isAuthenticated();
     setCurrentUser(cuser);
