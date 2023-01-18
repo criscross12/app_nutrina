@@ -1,13 +1,15 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { BsNodePlusFill } from "react-icons/bs";
 import { getMedicalRes, getPatientByUuid } from "../utils/AuthService";
+import { useRouter } from "next/router";
 
 export default function tableFinalConsultation({ data, access }) {
+  const { push } = useRouter();
   const [datas, setData] = useState([]);
   const [patient, setPatient] = useState([]);
   const getPatient = async () => {
     const res = await getPatientByUuid(data["id"], access);
-    console.log("getPatient: ", res);
     setPatient(res);
   };
   const getData = async () => {
@@ -98,6 +100,35 @@ export default function tableFinalConsultation({ data, access }) {
     let createSpace = [];
     datas.map((i) => {
       createSpace.push(<TD data={i[pos][res]} />);
+    });
+    if (datas.length < 6) {
+      for (let index = datas.length; index < 6; index++) {
+        createSpace.push(<TD data="" />);
+      }
+    }
+    return createSpace;
+  };
+
+  const dataPrintOption = () => {
+    let createSpace = [];
+    datas.map((i) => {
+      createSpace.push(
+        <TD
+          data={
+            <div className="flex flex-col items-center ">
+              <button
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-full"
+                onClick={() =>
+                  push("/admin/uuid/" + i.uuid + "?type=updateData")
+                }
+                key={i.uuid}
+              >
+                <BsNodePlusFill />
+              </button>
+            </div>
+          }
+        />
+      );
     });
     if (datas.length < 6) {
       for (let index = datas.length; index < 6; index++) {
@@ -233,6 +264,10 @@ export default function tableFinalConsultation({ data, access }) {
                 <tr>
                   <td className="border border-gray-400">CMB</td>
                   {dataPrintBM("circumferences", "cmb")}
+                </tr>
+                <tr>
+                  <td className="border border-gray-400">Generar DE</td>
+                  {dataPrintOption()}
                 </tr>
               </tbody>
             </table>

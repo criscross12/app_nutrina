@@ -4,9 +4,10 @@ import Layout from "../../components/layout";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import styles from "../../styles/Home.module.css";
-import { datahelp } from "../../utils/index";
+import { datahelp, dataUpdate } from "../../utils/index";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
+import axios from "axios";
 import { useAppContext } from "../../context/dataContext";
 import { NUTRINA_API } from "../../utils/config";
 
@@ -18,10 +19,6 @@ const posts = () => {
   }, [currentUser]);
   //
   const { push, query } = useRouter();
-  useEffect(() => {
-    if (query.id) {
-    }
-  }, []);
 
   const {
     register,
@@ -31,36 +28,66 @@ const posts = () => {
 
   const onSubmit = async (data) => {
     //TODO validar si la consulta es nueva o de seguimiento.
-    const dataSend = datahelp(data);
-    if (query.id) dataSend.patient_uuid = query.id;
-    const response = await fetch(
-      NUTRINA_API.apiNutrina + "/medical-consultation/medical-consultation",
-      {
-        method: "POST",
-        body: JSON.stringify(dataSend),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + currentUser,
-        },
+    if (query.type && query.type == "updateData") {
+      const dataSend = dataUpdate(data);
+      const updateRes = await fetch(
+        NUTRINA_API.apiNutrina + "/medical-consultation/update/" + query.id,
+        {
+          method: "PUT",
+          body: JSON.stringify(dataSend),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + currentUser,
+          },
+        }
+      );
+      console.log(updateRes);
+      if (updateRes.status == 200) {
+        Swal.fire({
+          position: "top-start",
+          icon: "success",
+          title: "Consulta Nutricional Actualiza!!",
+          showConfirmButton: true,
+          timer: 1500,
+        });
+        push("/admin/patients");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Algo salio mal!",
+        });
       }
-    );
-    const uuidConsultation = await response.json();
-    if (response.status == 200) {
-      Swal.fire({
-        position: "top-start",
-        icon: "success",
-        title: "Your work has been saved",
-        showConfirmButton: true,
-        timer: 1500,
-      });
-      push("/admin/patients");
-      //push("/admin/history/" + uuidConsultation.uuid + "?type=history");
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Algo salio mal!",
-      });
+      const dataSend = datahelp(data);
+      if (query.id) dataSend.patient_uuid = query.id;
+      const response = await fetch(
+        NUTRINA_API.apiNutrina + "/medical-consultation/medical-consultation",
+        {
+          method: "POST",
+          body: JSON.stringify(dataSend),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + currentUser,
+          },
+        }
+      );
+      if (response.status == 200) {
+        Swal.fire({
+          position: "top-start",
+          icon: "success",
+          title: "Consulta exitosa!!",
+          showConfirmButton: true,
+          timer: 1500,
+        });
+        push("/admin/patients");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Algo salio mal!",
+        });
+      }
     }
   };
 
@@ -391,54 +418,6 @@ const posts = () => {
     </section>
   );
 
-  const DistributionFields = () => (
-    <section className={styles.inputGroup}>
-      <h3>Distribución energética</h3>
-      <div className="">
-        <Input
-          name="kcalCarboHydrates"
-          label="Porcentaje para hidratos de carbono:"
-          required
-          type="number"
-          placeholder="##"
-        />
-        <Input
-          name="kcalLipids"
-          label="Porcentaje para lípidos:"
-          required
-          type="number"
-          placeholder="##"
-        />
-        <Input
-          name="kcalProteins"
-          label="Porcentaje para proteínas:"
-          required
-          type="number"
-          placeholder="##"
-        />
-      </div>
-    </section>
-  );
-
-  const NotesFields = () => (
-    <section className={styles.inputGroup}>
-      <h3>Notas generales</h3>
-      <div className="">
-        <br />
-        <br />
-        <br />
-        <Textarea
-          {...register("note")}
-          rows="5"
-          cols="150"
-          bordered
-          color="primary"
-          labelPlaceholder="Agregar notas"
-        />
-      </div>
-    </section>
-  );
-
   /** Nnavigation between steps */
   const rightArrow =
     "https://ik.imagekit.io/lrjseyuxi3m/youtube/Form/next-arrow_1pmaQTqF3.svg?updatedAt=1634410703345";
@@ -460,7 +439,7 @@ const posts = () => {
         <button
           type="button"
           className={styles.nextButton}
-          // disabled={!isValid}
+          //disabled={!isValid}
           onClick={() => {
             setStep(step + 1);
           }}
@@ -500,7 +479,7 @@ const posts = () => {
   const [step, setStep] = useState(0);
 
   let fieldGroups = [];
-  if (query.id) {
+  if (query.id && query.type == null) {
     fieldGroups = [
       // <PersonFields />,
       <ContactFields />,
@@ -522,23 +501,194 @@ const posts = () => {
     ];
   }
 
-  return (
-    <Layout title={"Consulta"}>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <h2>
-          {query.id ? "Seguimiento de paciente" : "Registro de Pacientes"}
-        </h2>
-        <img
-          src={query.id ? "../../nutrina1.png" : "../nutrina1.png"}
-          alt="description of image"
-          class="absolute right-0 top-0 w-22 h-24"
-        />
-        {fieldGroups[step]}
-        <Navigation />
-        <Reference />
-      </form>
-    </Layout>
-  );
+  if (query.type == "updateData") {
+    const [stepUpdate, setStepUpdate] = useState(0);
+    const NavigationUpdate = () => (
+      <section className={styles.navigationControls}>
+        {stepUpdate === fieldGroupsData.length - 1 && (
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={!isValid}
+          >
+            SAVE
+          </button>
+        )}
+        {stepUpdate < fieldGroupsData.length - 1 && (
+          <button
+            type="button"
+            className={styles.nextButton}
+            //disabled={!isValid}
+            onClick={() => {
+              setStepUpdate(stepUpdate + 1);
+            }}
+          >
+            <img src={rightArrow} alt="description of image" />
+            Siguiente
+          </button>
+        )}
+        {step > 0 && (
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={() => {
+              setStepUpdate(stepUpdate - 1);
+            }}
+          >
+            <img src={leftArrow} alt="description of image" />
+            Atrás
+          </button>
+        )}
+      </section>
+    );
+
+    /** Mark the input group already filled as blue or gray if not */
+    const Reference = () => (
+      <footer className={styles.reference}>{renderMarkers()}</footer>
+    );
+    function renderMarkers() {
+      let markers = [];
+      for (let i = 0; i < fieldGroupsData.length; i++)
+        markers.push(
+          <span className={step >= i ? styles.markerBlue : styles.markerGray} />
+        );
+      return markers;
+    }
+
+    const [datas, setData] = useState([]);
+    const getDataConsultation = async () => {
+      const { data: res } = await axios.get(
+        NUTRINA_API.apiNutrina + "/medical-consultation/One/" + query.id,
+        {
+          headers: {
+            Authorization: "Bearer " + currentUser,
+          },
+        }
+      );
+      setData(res);
+    };
+    useEffect(() => {
+      getDataConsultation();
+    }, []);
+    const fieldGroupsData = [
+      <Input
+        name="kcalCarboHydrates"
+        value={datas["fao_who_onu"]}
+        label="Porcentaje para hidratos de carbono:"
+        type="text"
+      />,
+      <Input
+        value={datas["harris_benedict"]}
+        name="kcalCarboHydrates"
+        label="Porcentaje para hidratos de carbono:"
+        type="text"
+      />,
+      <Input
+        value={datas["valencia"]}
+        name="kcalCarboHydrates"
+        label="Porcentaje para hidratos de carbono:"
+        type="text"
+      />,
+      <Input
+        value={datas["mifflin_st"]}
+        name="kcalCarboHydrates"
+        label="Porcentaje para hidratos de carbono:"
+        type="text"
+      />,
+      <Input
+        value={datas["average"]}
+        name="kcalCarboHydrates"
+        label="Porcentaje para hidratos de carbono:"
+        type="text"
+      />,
+    ];
+    const DistributionFields = () => (
+      <section className={styles.inputGroup}>
+        <h3>Distribución energética</h3>
+        <div>{fieldGroupsData}</div>
+        <div className="">
+          <Input
+            name="kcalCarboHydrates"
+            label="Porcentaje para hidratos de carbono:"
+            required
+            type="number"
+            placeholder="##"
+          />
+          <Input
+            name="kcalLipids"
+            label="Porcentaje para lípidos:"
+            required
+            type="number"
+            placeholder="##"
+          />
+          <Input
+            name="kcalProteins"
+            label="Porcentaje para proteínas:"
+            required
+            type="number"
+            placeholder="##"
+          />
+        </div>
+      </section>
+    );
+
+    const NotesFields = () => (
+      <section className={styles.inputGroup}>
+        <h3>Notas generales</h3>
+        <div className="">
+          <br />
+          <br />
+          <br />
+          <Textarea
+            {...register("note")}
+            rows="5"
+            cols="150"
+            bordered
+            color="primary"
+            labelPlaceholder="Agregar notas"
+          />
+        </div>
+      </section>
+    );
+
+    let fieldGroupsR = [<DistributionFields />, <NotesFields />];
+
+    return (
+      <Layout title={"Consulta"}>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <h2>
+            {query.id ? "Seguimiento de paciente" : "Registro de Pacientes"}
+          </h2>
+          <img
+            src={query.id ? "../../nutrina1.png" : "../nutrina1.png"}
+            alt="description of image"
+            class="absolute right-0 top-0 w-22 h-24"
+          />
+          {fieldGroupsR[step]}
+          <NavigationUpdate />
+          <Reference />
+        </form>
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout title={"Consulta"}>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <h2>
+            {query.id ? "Seguimiento de paciente" : "Registro de Pacientes"}
+          </h2>
+          <img
+            src={query.id ? "../../nutrina1.png" : "../nutrina1.png"}
+            alt="description of image"
+            class="absolute right-0 top-0 w-22 h-24"
+          />
+          {fieldGroups[step]}
+          <Navigation />
+          <Reference />
+        </form>
+      </Layout>
+    );
+  }
 };
 
 export default posts;

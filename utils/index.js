@@ -89,3 +89,19 @@ export const datahelp = (data) => {
   };
   return dataResponse;
 };
+
+export const dataUpdate = (data) => {
+  const note = data["note"];
+
+  const energy_distribution = {
+    kcalCarboHydrates: parseFloat(data["kcalCarboHydrates"]),
+    kcalLipids: parseFloat(data["kcalLipids"]),
+    kcalProteins: parseFloat(data["kcalProteins"]),
+  };
+
+  const dataResponse = {
+    energy_distribution,
+    note,
+  };
+  return dataResponse;
+};

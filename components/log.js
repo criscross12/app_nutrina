@@ -46,9 +46,9 @@ const Log = () => {
                   <Image
                     alt="test"
                     src="/nutrina1.png"
-                    width="125"
-                    height="105"
-                    className="flex justify-center hover:scale-110 hover:rotate-12"
+                    width="200"
+                    height="100"
+                    className="flex justify-center"
                   />
                 </div>
                 <h1 className="text-4xl text-center font-blond text-green-500">

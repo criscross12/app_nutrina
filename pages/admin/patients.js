@@ -251,6 +251,7 @@ const Patients = () => {
                         <td className="text-sm text-gray-900 font-light px-3 py-2 whitespace-nowrap">
                           <button
                             key={uuid}
+                            title="Suspenser paciente"
                             onClick={() => {
                               DeleteUser(uuid);
                             }}
