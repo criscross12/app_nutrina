@@ -21,9 +21,9 @@ export default function section1() {
         </div>
       </div>
       {/**image area */}
-      <div className="mr-20 md:block hidden">
-        <Image
-          src={"/images/imagen.png"}
+      <div className="mr-20 md:block hidden ">
+        <Image className="w-full rounded lg:w-1/3"
+          src={"/images/Dise.png"}
           alt="description of image"
           width={1500}
           height={1000}

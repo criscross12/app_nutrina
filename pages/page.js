@@ -1,4 +1,5 @@
 import Format from "../Layout/format";
+import Image from "next/image";
 
 export default function Page() {
   return (
@@ -12,7 +13,7 @@ export default function Page() {
             <div className="block sm:flex md:block lg:flex items-center justify-center">
               <div className="mt-8 sm:m-8 md:m-0 md:mt-8 lg:m-8 text-center">
                 <span className="block text-sm text-gray-600 mt-2">
-                  <img alt="test" src="me.png"/>
+                  <img className="inline-block h-20 w-20 rounded-full ring-1 ring-white" src="me.png"/>
                 </span>
               </div>
             </div>
@@ -40,8 +41,8 @@ export default function Page() {
                       <line x1="7" y1="16" x2="17" y2="16" />
                     </svg>
                   </div>
-                  <span className="text-gray-700 text-lg ml-3">
-                    L.N MONSERRAT PIÑA JIMÉNEZ
+                  <span className=" text-lg ml-3">
+                  <h4 class="text-dark mb-3  text-xl font-bold">L.N MONSERRAT PIÑA JIMÉNEZ</h4>
                   </span>
                 </li>
                 <li className="flex items-center mt-3">
@@ -65,16 +66,13 @@ export default function Page() {
                       <path d="M3 13a20 20 0 0 0 18 0" />
                     </svg>
                   </div>
-                  <span className="text-gray-700 text-lg ml-3">
-                    Cédula profesional: 12490409 UAÉMEX
+                  <span className="text-lg ml-3 p-8">
+                  <h4 class="text-dark mb-1 text-xl font-bold">CÉDULA PROFESIONAL</h4>
+              <p class="text-body-color text-base"> 12490409 UAÉMEX</p>
                   </span>
                 </li>
               </ul>
             </div>
-            <a
-              className=" flex items-center justify-center bg-gray-200 hover:bg-gray-300 p-8 text-md font-semibold text-gray-800 uppercase mt-16"
-              href="#"
-            ></a>
           </div>
           <div className="w-full md:w-1/2 relative z-0 px-8 md:px-0 md:py-16">
             <div className="bg-blue-900 text-white rounded-b md:rounded-b-none md:rounded-r shadow-lg overflow-hidden">
@@ -82,45 +80,58 @@ export default function Page() {
                 Nutriña
               </div>
 
-              <main className="h-screen w-screen -my-24 flex justify-items-center items-center flex-wrap">
-                <div className="bg-white w-60 h-64 shadow-md rounded m-8">
-                  <div className="w-full h-1/4 p-3">
-                    <a
-                      href="#"
-                      className=" hover:text-yellow-600 text-gray-700"
-                    >
+              <form>
+          <div className="w-full h-1/4 p-3">
+          <div className="bg-white rounded-full p-2 fill-current text-green-700">
+          <li className="flex items-center mt-3">
+                  <div className="bg-white rounded-full p-2 fill-current text-green-700">
+                  <Image className="float-right" src={"/images/misi.png"} width={840} height={720}/>
+                  </div>
+                  
+                  <span className="text-lg ml-3 p-8">
+                  <a className=" text-black
+                    ">
                       <span className="text-lg font-semibold uppercase tracking-wide ">
                         Misión
                       </span>
                     </a>
-                    <p className="text-gray-600 text-sm leading-5 mt-1">
+                    <p className="text-black text-sm leading-5 mt-1">
                       Brindar servicios de nutrición de calidad con calidez y
                       profesionalismo, basado en evidencia científica, acordes a
                       las necesidades de cada paciente, y al mismo tiempo
                       aportar las herramientas necesarias en materia de
                       educación nutricional para el empoderamiento personal.
                     </p>
+                  </span>
+                </li>
                   </div>
-                </div>
-                <div className="bg-white w-52 h-64 shadow-md rounded m-3">
+                  </div>
                   <div className="w-full h-1/4 p-3">
-                    <a
-                      href="#"
-                      className=" hover:text-yellow-600 text-gray-700"
-                    >
+                  <div className="bg-white rounded-full p-2 fill-current text-green-700">
+                  <li className="flex items-center mt-3">
+                  <div className="bg-white rounded-full p-2 fill-current text-green-700">
+                  <Image className="float-right" src={"/images/visi.png"} width={540} height={520}/>
+                  </div>
+                  
+                  <span className="text-lg ml-3 p-8">
+                  <a className=" text-black
+                    ">
                       <span className="text-lg font-semibold uppercase tracking-wide ">
                         Visión
                       </span>
                     </a>
-                    <p className="text-gray-600 text-sm leading-5 mt-1">
-                      Ser un Consultorio Nutricional que brinde servicios
+                    <p className="text-black text-sm leading-5 mt-1">
+                    Ser un Consultorio Nutricional que brinde servicios
                       especializados que satisfagan las necesidades de la
                       población para contribuir en la mejora de la Salud
                       Pública.
                     </p>
+                  </span>
+                  </li>
                   </div>
-                </div>
-              </main>
+                  </div>
+          </form>
+          
             </div>
           </div>
         </div>
