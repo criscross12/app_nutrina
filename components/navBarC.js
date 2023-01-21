@@ -14,7 +14,7 @@ export default function NavbarC() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav className="w-full bg-teal-500">
+      <nav className="fixed w-full z-10 top-0 bg-teal-500">
         <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
           <div>
             <div className="flex items-center justify-between py-3 md:py-5 md:block">
@@ -79,11 +79,6 @@ export default function NavbarC() {
                 <li className="text-white">
                   <Link href="/about">
                     <a>About US</a>
-                  </Link>
-                </li>
-                <li className="text-white">
-                  <Link href="/contact">
-                    <a>Contact US</a>
                   </Link>
                 </li>
               </ul>

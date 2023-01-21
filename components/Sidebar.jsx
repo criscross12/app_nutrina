@@ -2,22 +2,12 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useMemo, useContext, useEffect } from "react";
-import { AiOutlineLogout, AiFillDashboard } from "react-icons/ai";
+import { AiOutlineLogout } from "react-icons/ai";
 import { FaLeaf } from "react-icons/fa";
 import { DataContext } from "../context/dataContext";
 import { isAuthenticated, logOut } from "../utils/AuthService";
 import { useCookies } from "react-cookie";
-import {
-  ArticleIcon,
-  CollapsIcon,
-  CalendarIcon,
-  LogoIcon,
-  LogoutIcon,
-  UsersIcon,
-  HelpIcon,
-  Report,
-  Dashbord,
-} from "./icons";
+import { CollapsIcon, CalendarIcon, LogoutIcon, UsersIcon } from "./icons";
 
 const menuItems = [
   { id: 1, label: "Paciente", icon: UsersIcon, link: "/admin/patients" },
