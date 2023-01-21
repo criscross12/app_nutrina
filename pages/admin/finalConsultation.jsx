@@ -25,6 +25,7 @@ export default function Home() {
   return (
     <div>
       <Navbar />
+      <br></br>
       <div className="bg-white flex-1 p-8 text-black">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
